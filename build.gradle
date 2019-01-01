@@ -1,0 +1,30 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+task copyProjectBeanFile(type: Copy) {
+    from "${projectDir}/src/main/resources/META-INF"
+    into "${buildDir}/classes/java/main/META-INF"
+}
+
+task copyProjectTestBeanFile(type: Copy) {
+    from "${projectDir}/src/test/resources/META-INF"
+    into "${buildDir}/classes/java/test/META-INF"
+}
+
+processResources.dependsOn copyProjectBeanFile
+processResources.dependsOn copyProjectTestBeanFile
+
+dependencies {
+    compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.1.1'
+    compile group: 'org.jboss.weld.se', name: 'weld-se-core', version: '3.0.5.Final'
+    compile group: 'org.glassfish.jersey.inject', name: 'jersey-cdi2-se', version: '2.26'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile "org.mockito:mockito-core:2.15.0"
+    testCompile group: 'org.glassfish.jersey.test-framework', name: 'jersey-test-framework-core', version: '2.26'
+    testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-jetty', version: '2.26'
+}
